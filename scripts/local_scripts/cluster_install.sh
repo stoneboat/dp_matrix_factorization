@@ -27,9 +27,26 @@ if [ ! -d "/tmp/install" ]; then
 fi
 cd /tmp/install
 
-pip install jax jaxlib numpy matplotlib seaborn
+# Download and install pre-built jaxlib wheel
+# https://storage.googleapis.com/jax-releases/jax_releases.html
+if [ ! -f "jaxlib-0.1.75-cp38-none-manylinux2010_x86_64.whl" ]; then
+    echo "Downloading jaxlib wheel..."
+    wget https://storage.googleapis.com/jax-releases/nocuda/jaxlib-0.1.75-cp38-none-manylinux2010_x86_64.whl
+fi
+pip install jaxlib-0.1.75-cp38-none-manylinux2010_x86_64.whl
 
-pip install jupyterlab ipykernel
+# Install tensorflow and its dependencies
+pip install tensorflow==2.7.0
+
+# Install tensorflow-federated and its dependencies
+# pip install tensorflow-federated==0.19.0
+pip install jax==0.2.27
+
+# Install remaining requirements
+pip install tensorflow-privacy==0.8.0
+
+pip install ipykernel
+
 
 # Register the kernel
 python -m ipykernel install --user --name=dp-matfac-env --display-name "Python (dp-matfac-env)"
